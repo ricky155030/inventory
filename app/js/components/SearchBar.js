@@ -23,6 +23,11 @@ class SearchBar extends React.Component {
     super(props)
   }
 
+  update() {
+    let value = this.refs.search.input.value
+    this.props.setDataTable({filterString: value})
+  }
+
   render() {
     return (
       <div>
@@ -33,13 +38,23 @@ class SearchBar extends React.Component {
           underlineStyle={{ borderColor: Colors.grey500 }}
           underlineFocusStyle={{ borderColor: Colors.grey800 }}
           hintStyle={{ color: Colors.grey500 }}
+          onKeyDown={(e) => {
+            switch(e.which) {
+              case 13:
+                this.update()
+                break;
+              default:
+                break;
+            }
+          }}
         />
         <RaisedButton 
           fullWidth
           label="Go"
+          backgroundColor={Colors.grey500}
+          labelColor="#FFF"
           onClick={() => {
-            let value = this.refs.search.input.value
-            this.props.setDataTable({filterString: value})
+           this.update()
           }}
         />
       </div>

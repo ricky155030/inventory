@@ -13,12 +13,27 @@ class DataTable extends React.Component {
     super(props)
     this.state = {
       displayName: {},
-      colWrapper: {}
+      colWrapper: {},
+      status: 0
     }
   }
 
   componentWillMount() {
     this.refresh(this.props)
+  }
+
+  componentWillReceiveProps() {
+    console.log('change')
+  }
+
+  componentWillUpdate() {
+    console.log('will update')
+    console.time("update");
+  }
+
+  componentDidUpdate() {
+    console.log('did update')
+    console.timeEnd("update");
   }
   
   refresh(props) {
@@ -93,20 +108,28 @@ class DataTable extends React.Component {
   }
   
   render() {
-    return (
-      <Table
-        className="table"
-        itemsPerPage={this.props.itemsPerPage} 
-        sortable={this.props.colSortable}
-        filterable={this.props.colFilterable}
-        filterBy={this.props.filterString}
-      >
-        <Thead>
-          {this.generateTh(this.props.displayName, this.props.colDisplay)}
-        </Thead>
-        {this.generateTr(this.props.data)}
-      </Table>
-    )
+    if(this.state.status == 0) {
+      return (
+        <h1> No data </h1>
+      )
+    }
+
+    if(this.state.status == 1) {
+      return (
+        <Table
+          className="table"
+          itemsPerPage={this.props.itemsPerPage} 
+          sortable={this.props.colSortable}
+          filterable={this.props.colFilterable}
+          filterBy={this.props.filterString}
+        >
+          <Thead>
+            {this.generateTh(this.props.displayName, this.props.colDisplay)}
+          </Thead>
+          {this.generateTr(this.props.data)}
+        </Table>
+      )
+    }
   }
 }
 

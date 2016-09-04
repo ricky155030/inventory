@@ -30,10 +30,15 @@ enhanced.Col = wrapperProps(Col, {
 
 const data = (num) => {
   let arr = []
+  console.log('run')
+  console.time("label");
 
   for(var i = 0; i < num; i++) {
     arr.push({name: 'hwkao', age: i, id: i})
   }
+  
+  console.timeEnd("label");
+
   return arr
 }
 
@@ -86,6 +91,15 @@ const definition = {
 class List extends React.Component {
   constructor(props) {
     super(props)
+    this.state = {
+      data: []
+    }
+  }
+
+  componentDidMount() {
+    this.setState({
+      data: data(1000)
+    })
   }
 
   render() {
@@ -134,7 +148,7 @@ class List extends React.Component {
               <DataTableContainer
                 definition={definition}
                 itemsPerPage={10}
-                data={data(10000)}
+                data={this.state.data}
                 filterString={this.props.searchText}
               />
             </CardWrapper>
