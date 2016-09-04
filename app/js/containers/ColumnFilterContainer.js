@@ -2,7 +2,7 @@
 
 import { connect } from 'react-redux'
 import { SetDataTable } from '../actions'
-import SearchBar from '../components/SearchBar'
+import ColumnFilter from '../components/ColumnFilter'
 
 const mapStateToProps = function(state) {
   return {
@@ -17,9 +17,9 @@ const mapDispatchToProps = function(dispatch) {
   }
 }
 
-const SearchBarContainer = connect(
+const ColumnFilterContainer = connect(
   mapStateToProps,
   mapDispatchToProps
-)(SearchBar)
+)(ColumnFilter)
 
-export default SearchBarContainer
+export default ColumnFilterContainer

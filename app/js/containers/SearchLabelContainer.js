@@ -2,7 +2,7 @@
 
 import { connect } from 'react-redux'
 import { SetDataTable } from '../actions'
-import SearchBar from '../components/SearchBar'
+import SearchLabel from '../components/SearchLabel'
 
 const mapStateToProps = function(state) {
   return {
@@ -17,9 +17,9 @@ const mapDispatchToProps = function(dispatch) {
   }
 }
 
-const SearchBarContainer = connect(
+const SearchLabelContainer = connect(
   mapStateToProps,
   mapDispatchToProps
-)(SearchBar)
+)(SearchLabel)
 
-export default SearchBarContainer
+export default SearchLabelContainer

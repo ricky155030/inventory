@@ -1,27 +1,28 @@
 'use strict';
 
 import React from 'react';
-import TextField from 'material-ui/TextField';
-import Avatar from 'material-ui/Avatar';
-import Checkbox from 'material-ui/Checkbox';
-import Chip from 'material-ui/Chip';
-import { Tabs, Tab } from 'material-ui/Tabs';
-import ListItem from 'material-ui/List/ListItem';
-import { Card, CardText } from 'material-ui/Card';
+import { Card, CardText, CardHeader } from 'material-ui/Card';
 import { Toolbar, ToolbarGroup, ToolbarTitle } from 'material-ui/Toolbar';
-import { Link } from 'react-router'
 import IconButton from 'material-ui/IconButton/IconButton';
-import IconClose from 'material-ui/svg-icons/navigation/close';
+import Avatar from 'material-ui/Avatar';
+import Chip from 'material-ui/Chip';
 import IconDelete from 'material-ui/svg-icons/action/delete';
 import IconEdit from 'material-ui/svg-icons/editor/mode-edit';
-import { Table, Th, Tr, Td, Tbody, Thead, unsafe } from 'reactable'
-import { grey500, red200, cyan200 } from 'material-ui/styles/colors';
+import IconSearch from 'material-ui/svg-icons/action/search';
+import IconViewList from 'material-ui/svg-icons/action/view-list';
+import IconFilter from 'material-ui/svg-icons/content/filter-list';
+import * as Colors from 'material-ui/styles/colors';
 import { Grid, Row, Col } from 'react-flexbox-grid'
-import { wrapperProps } from '../utils'
-import DataTable from './DataTable'
+import { wrapperProps, CardWrapper } from '../utils'
 import SearchBarContainer from '../containers/SearchBarContainer'
+import SearchLabelContainer from '../containers/SearchLabelContainer'
+import DataTableContainer from '../containers/DataTableContainer'
+import ColumnFilterContainer from '../containers/ColumnFilterContainer'
 
-const CustomCol = wrapperProps(Col, {
+/* Enhanced Components */
+const enhanced = {}
+
+enhanced.Col = wrapperProps(Col, {
   style: {
     marginBottom: '20px'
   }
@@ -36,117 +37,108 @@ const data = (num) => {
   return arr
 }
 
+const definition = {
+  id: { 
+    show: true,
+    filterable: true,
+    sortable: true,
+    name: 'ID'
+  },
+  name: { 
+    show: false,
+    filterable: true,
+    sortable: true,
+    name: 'Name' 
+  },
+  age: { 
+    show: true,
+    filterable: true,
+    sortable: true,
+    name: 'Age' 
+  },
+  action: { 
+    show: true,
+    filterable: false,
+    sortable: true,
+    wrapper: (row) => {
+      return (
+        <div>
+          <IconButton
+            onClick={() => {
+              this.props.router.push('/edit/' + row.id)
+            }}
+          >
+            <IconEdit color={Colors.grey500} />
+          </IconButton>
+          <IconButton
+            onClick={() => {
+              this.props.router.push('/delete/' + row.id)
+            }}
+          >
+            <IconDelete color={Colors.grey500} />
+          </IconButton>
+        </div>
+      )
+    }
+  }
+}
+
 class List extends React.Component {
   constructor(props) {
     super(props)
   }
 
-  generateCheckbox(definition) {
-    return Object.keys(definition).map((key) => {
-      return (
-        <Checkbox
-          label={definition[key].name}
-          defaultChecked={definition[key].show}
-          onCheck={(e, checked) => {
-            definition[key].show = checked
-            this.forceUpdate()
-          }}
-          style={{ width: 'auto' }}
-        />
-      )
-    })
-  }
-
   render() {
-    const definition = {
-      id: { 
-        show: true,
-        filterable: true,
-        sortable: true,
-        name: 'ID',
-        wrapper: (row) => { 
-          return (
-            <Chip>{row.id}</Chip>
-          )
-        } 
-      },
-      name: { 
-        show: false,
-        filterable: true,
-        sortable: true,
-        name: 'Name' 
-      },
-      age: { 
-        show: true,
-        filterable: true,
-        sortable: true,
-        name: 'Age' 
-      },
-      action: { 
-        show: true,
-        filterable: false,
-        sortable: true,
-        name: 'action',
-        wrapper: (row) => {
-          return (
-            <div>
-              <IconButton
-                onClick={() => {
-                  this.props.router.push('/edit/' + row.id)
-                }}
-              >
-                <IconEdit />
-              </IconButton>
-              <IconButton
-                onClick={() => {
-                  this.props.router.push('/delete/' + row.id)
-                }}
-              >
-                <IconDelete />
-              </IconButton>
-            </div>
-          )
-        }
-      }
-    }
-
     return (
       <Grid fluid>
         <Row>
-          <CustomCol lg={2} md={4} sm={12} xs={12}>
-            <SearchBarContainer />
-            <br />
-            <Card>
-              <Toolbar
-                style={{ backgroundColor: red200, height: '5px' }}
+          <enhanced.Col lg={12} md={12} sm={12} xs={12}>
+            <Grid fluid style={{ padding: 0 }}>
+              <Row>
+                <enhanced.Col lg={2} md={4} sm={6} xs={12}>
+                  <CardWrapper
+                    avatar={<IconSearch color="#FFF" />}
+                    avatarColor={Colors.grey500}
+                    title="Search"
+                    titleColor="#FFF"
+                  >
+                    <SearchBarContainer />
+                  </CardWrapper>
+                </enhanced.Col>
+                <enhanced.Col lg={2} md={4} sm={6} xs={12}>
+                  <CardWrapper
+                    avatar={<IconFilter color="#FFF" />}
+                    avatarColor={Colors.grey500}
+                    maxHeight="200px"
+                    title="Column Visible"
+                    titleColor="#FFF"
+                  >
+                    <ColumnFilterContainer
+                      colAll={this.props.colAll}
+                      colDisplay={this.props.colDisplay}
+                      displayName={this.props.displayName}
+                    />
+                  </CardWrapper>
+                </enhanced.Col>
+              </Row>
+            </Grid>
+            <CardWrapper
+              avatar={<IconViewList color="#FFF" />}
+              avatarColor={Colors.grey500}
+              title="List"
+              titleColor="#FFF"
+            >
+              <SearchLabelContainer 
+                searchText={this.props.searchText}
               />
-              <CardText>
-                {this.generateCheckbox(definition)}
-              </CardText>
-            </Card>
-          </CustomCol>
-          <CustomCol lg={10} md={8} sm={12} xs={12}>
-            <Card>
-              <Toolbar
-                style={{ backgroundColor: cyan200, height: '5px' }}
+              <DataTableContainer
+                definition={definition}
+                itemsPerPage={10}
+                data={data(10000)}
+                filterString={this.props.searchText}
               />
-              <CardText>
-                There total {data(100).length} row
-              </CardText>
-              <CardText>
-                <DataTable
-                  definition={definition}
-                  itemsPerPage={10}
-                  data={data(100)}
-                  filterString={this.props.searchText}
-                />
-              </CardText>
-            </Card>
-          </CustomCol>
-        </Row>
-        <Row>
-          <CustomCol lg={1} md={4} sm={8} xs={12}>
-          </CustomCol>
+            </CardWrapper>
+          </enhanced.Col>
         </Row>
       </Grid>
     )

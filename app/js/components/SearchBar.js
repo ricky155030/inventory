@@ -7,12 +7,13 @@ import ListItem from 'material-ui/List/ListItem';
 import { Card, CardText } from 'material-ui/Card';
 import { Toolbar, ToolbarGroup, ToolbarTitle } from 'material-ui/Toolbar';
 import { Link } from 'react-router'
+import RaisedButton from 'material-ui/RaisedButton';
 import IconButton from 'material-ui/IconButton/IconButton';
 import IconClose from 'material-ui/svg-icons/navigation/close';
 import IconDelete from 'material-ui/svg-icons/action/delete';
 import IconEdit from 'material-ui/svg-icons/editor/mode-edit';
 import { Table, Th, Tr, Td, Tbody, Thead, unsafe } from 'reactable'
-import { grey500, green200 } from 'material-ui/styles/colors';
+import * as Colors from 'material-ui/styles/colors';
 import { Grid, Row, Col } from 'react-flexbox-grid'
 import { wrapperProps } from '../utils'
 import DataTable from './DataTable'
@@ -24,21 +25,24 @@ class SearchBar extends React.Component {
 
   render() {
     return (
-      <Card>
-        <Toolbar
-          style={{ backgroundColor: green200, height: '5px' }}
+      <div>
+        <TextField 
+          ref="search"
+          hintText="Search"
+          fullWidth
+          underlineStyle={{ borderColor: Colors.grey500 }}
+          underlineFocusStyle={{ borderColor: Colors.grey800 }}
+          hintStyle={{ color: Colors.grey500 }}
         />
-        <CardText>
-          <TextField 
-            floatingLabelText="Search"
-            fullWidth
-            onChange={(e) => {
-              let value = e.target.value
-              this.props.setSearchText(value)
-            }}
-          />
-        </CardText>
-      </Card>
+        <RaisedButton 
+          fullWidth
+          label="Go"
+          onClick={() => {
+            let value = this.refs.search.input.value
+            this.props.setDataTable({filterString: value})
+          }}
+        />
+      </div>
     )
   }
 }

@@ -2,7 +2,7 @@
 
 import { connect } from 'react-redux'
 import { SetDataTable } from '../actions'
-import List from '../components/List'
+import DataTable from '../components/DataTable'
 
 const mapStateToProps = function(state) {
   return {
@@ -24,9 +24,9 @@ const mapDispatchToProps = function(dispatch) {
   }
 }
 
-const ListContainer = connect(
+const DataTableContainer = connect(
   mapStateToProps,
   mapDispatchToProps
-)(List)
+)(DataTable)
 
-export default ListContainer
+export default DataTableContainer

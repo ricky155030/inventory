@@ -3,12 +3,6 @@
 import React from 'react';
 import { Table, Th, Tr, Td, Tbody, Thead, unsafe } from 'reactable'
 
-const wrap = (val) => {
-  return(
-    <a href={val}>{val}</a>
-  )
-}
-
 class DataTable extends React.Component {
   static propsTypes = {
     definition: React.PropTypes.object.isRequired,
@@ -18,30 +12,20 @@ class DataTable extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      colDisplay: [],
-      colSortable: [],
-      colFilterable: [],
       displayName: {},
-      data: [],
-      itemsPerPage: 10,
-      filterString: '',
+      colWrapper: {}
     }
   }
-  
-  componentDidMount() {
+
+  componentWillMount() {
     this.refresh(this.props)
   }
-
-  componentWillReceiveProps(nextProps) {
-    console.log(nextProps)
-    this.refresh(nextProps)
-  }
-
+  
   refresh(props) {
     let definition = props.definition
     let itemsPerPage = props.itemsPerPage
     let filterString = props.filterString
-    let data = props.data
+    let colAll = []
     let colSortable = []
     let colDisplay = []
     let colFilterable = []
@@ -49,55 +33,60 @@ class DataTable extends React.Component {
     let displayName = {}
 
     Object.keys(definition).forEach((key) => {
+      colAll.push(key) 
+
       if(definition[key].show)
-        colDisplay.push(key)
+        colDisplay.push(key) 
       if(definition[key].sortable)
-        colSortable.push(key)
+        colSortable.push(key) 
       if(definition[key].filterable)
-        colFilterable.push(key)
+        colFilterable.push(key) 
 
       displayName[key] = definition[key].name
       colWrapper[key] = definition[key].wrapper
     })
 
-    this.setState({
+    this.props.setDataTable({
+      colAll,
       colDisplay,
       colSortable,
       colFilterable,
-      displayName,
       itemsPerPage,
-      data,
       filterString,
+      displayName
+    })
+
+    this.setState({
       colWrapper
     })
   }
 
   generateTh(displayName, colDisplay) {
-    return colDisplay.map((item) => {
+    return colDisplay.map((item, index) => {
       return (
-        <Th column={item}>{displayName[item]}</Th>
+        <Th key={index} column={item}>{displayName[item]}</Th>
       )
     })
   }
 
   generateTd(row, colDisplay, colWrapper) {
-    return colDisplay.map((col) => {
+    return colDisplay.map((col, index) => {
       let result = row[col]
 
       if(colWrapper[col]) 
         result = colWrapper[col](row)
 
       return (
-        <Td column={col} value={row[col]}>{result}</Td>
+        <Td key={index} column={col} value={row[col]}>{result}</Td>
       )
     })
   }
 
   generateTr(data) {
-    return data.map((row) => {
+    return data.map((row, index) => {
       return (
-        <Tr>
-          {this.generateTd(row, this.state.colDisplay, this.state.colWrapper)}
+        <Tr key={index}>
+          {this.generateTd(row, this.props.colDisplay, this.state.colWrapper)}
         </Tr>
       )
     })
@@ -107,15 +96,15 @@ class DataTable extends React.Component {
     return (
       <Table
         className="table"
-        itemsPerPage={this.state.itemsPerPage} 
-        sortable={this.state.colSortable}
-        filterable={this.state.colFilterable}
-        filterBy={this.state.filterString}
+        itemsPerPage={this.props.itemsPerPage} 
+        sortable={this.props.colSortable}
+        filterable={this.props.colFilterable}
+        filterBy={this.props.filterString}
       >
         <Thead>
-          {this.generateTh(this.state.displayName, this.state.colDisplay)}
+          {this.generateTh(this.props.displayName, this.props.colDisplay)}
         </Thead>
-        {this.generateTr(this.state.data)}
+        {this.generateTr(this.props.data)}
       </Table>
     )
   }
