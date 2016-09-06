@@ -12,9 +12,7 @@ class DataTable extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      displayName: {},
-      colWrapper: {},
-      status: 0
+      colWrapper: {}
     }
   }
 
@@ -23,7 +21,7 @@ class DataTable extends React.Component {
   }
 
   componentWillReceiveProps() {
-    console.log('change')
+    console.log('receive props')
   }
 
   componentWillUpdate() {
@@ -35,7 +33,7 @@ class DataTable extends React.Component {
     console.log('did update')
     console.timeEnd("update");
   }
-  
+
   refresh(props) {
     let definition = props.definition
     let itemsPerPage = props.itemsPerPage
@@ -106,30 +104,22 @@ class DataTable extends React.Component {
       )
     })
   }
-  
-  render() {
-    if(this.state.status == 0) {
-      return (
-        <h1> No data </h1>
-      )
-    }
 
-    if(this.state.status == 1) {
-      return (
-        <Table
-          className="table"
-          itemsPerPage={this.props.itemsPerPage} 
-          sortable={this.props.colSortable}
-          filterable={this.props.colFilterable}
-          filterBy={this.props.filterString}
-        >
-          <Thead>
-            {this.generateTh(this.props.displayName, this.props.colDisplay)}
-          </Thead>
-          {this.generateTr(this.props.data)}
-        </Table>
-      )
-    }
+  render() {
+    return (
+      <Table
+        className="table"
+        itemsPerPage={this.props.itemsPerPage} 
+        sortable={this.props.colSortable}
+        filterable={this.props.colFilterable}
+        filterBy={this.props.filterString}
+      >
+        <Thead>
+          {this.generateTh(this.props.displayName, this.props.colDisplay)}
+        </Thead>
+        {this.generateTr(this.props.data)}
+      </Table>
+    )
   }
 }
 

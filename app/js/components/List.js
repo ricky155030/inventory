@@ -13,7 +13,7 @@ import IconViewList from 'material-ui/svg-icons/action/view-list';
 import IconFilter from 'material-ui/svg-icons/content/filter-list';
 import * as Colors from 'material-ui/styles/colors';
 import { Grid, Row, Col } from 'react-flexbox-grid'
-import { wrapperProps, CardWrapper } from '../utils'
+import { wrapperProps, CardWrapper, loadingWrapper } from '../utils'
 import SearchBarContainer from '../containers/SearchBarContainer'
 import SearchLabelContainer from '../containers/SearchLabelContainer'
 import DataTableContainer from '../containers/DataTableContainer'
@@ -27,6 +27,7 @@ enhanced.Col = wrapperProps(Col, {
     marginBottom: '20px'
   }
 })
+enhanced.DataTable = loadingWrapper(DataTableContainer)
 
 const data = (num) => {
   let arr = []
@@ -34,7 +35,7 @@ const data = (num) => {
   console.time("label");
 
   for(var i = 0; i < num; i++) {
-    arr.push({name: 'hwkao', age: i, id: i})
+    arr.push({name: 'hwkao', age: i, id: i, data: 'ahah', omg: 'nono', date: 'nonono'})
   }
   
   console.timeEnd("label");
@@ -61,30 +62,23 @@ const definition = {
     sortable: true,
     name: 'Age' 
   },
-  action: { 
+  data: { 
     show: true,
-    filterable: false,
+    filterable: true,
     sortable: true,
-    wrapper: (row) => {
-      return (
-        <div>
-          <IconButton
-            onClick={() => {
-              this.props.router.push('/edit/' + row.id)
-            }}
-          >
-            <IconEdit color={Colors.grey500} />
-          </IconButton>
-          <IconButton
-            onClick={() => {
-              this.props.router.push('/delete/' + row.id)
-            }}
-          >
-            <IconDelete color={Colors.grey500} />
-          </IconButton>
-        </div>
-      )
-    }
+    name: 'Data' 
+  },
+  omg: { 
+    show: true,
+    filterable: true,
+    sortable: true,
+    name: 'OMG' 
+  },
+  date: { 
+    show: true,
+    filterable: true,
+    sortable: true,
+    name: 'Date' 
   }
 }
 
@@ -98,7 +92,7 @@ class List extends React.Component {
 
   componentDidMount() {
     this.setState({
-      data: data(1000)
+      data: data(10000)
     })
   }
 
