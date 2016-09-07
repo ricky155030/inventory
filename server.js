@@ -22,6 +22,26 @@ app.post('/api/upload', upload.single('image'), function(req, res) {
   res.send(req.file)
 })
 
+app.get('/api/test', function(req, res) {
+  var timer
+  var obj = {
+    status: 'Failed',
+    data: {
+      name: 'hwkao',
+      age: 32
+    }
+  }
+
+  res.json(obj)
+
+  // function test() {
+  //   res.json(obj)
+  //   clearInterval(timer)
+  // }
+
+  // timer = setInterval(test, 2000)
+})
+
 app.get('/api/image/:filename', function(req, res) {
   res.sendFile('/tmp/' + req.params.filename, {
     headers: {

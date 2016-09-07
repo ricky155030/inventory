@@ -3,6 +3,7 @@
 
 import React from 'react';
 import Checkbox from 'material-ui/Checkbox';
+import Divider from 'material-ui/Divider';
 
 import { wrapperProps } from '../utils'
 
@@ -37,17 +38,20 @@ class ColumnFilter extends React.Component {
   generateCheckbox() {
     return this.props.colAll.map((key, index) => {
       return (
-        <Checkbox
-          key={index}
-          label={this.props.displayName[key] || key}
-          labelPosition="left"
-          defaultChecked={this.props.colDisplay.indexOf(key) != -1}
-          onCheck={(e, checked) => {
-            var result = checked ? this.unCheck(key) : this.check(key)
-            this.props.setDataTable({colDisplay: result})
-          }}
-          iconStyle={{ marginLeft: 'auto' }}
-        />
+        <div>
+          <Checkbox
+            key={index}
+            label={this.props.displayName[key] || key}
+            labelPosition="left"
+            defaultChecked={this.props.colDisplay.indexOf(key) != -1}
+            onCheck={(e, checked) => {
+              var result = checked ? this.unCheck(key) : this.check(key)
+              this.props.setDataTable({colDisplay: result})
+            }}
+            iconStyle={{ marginLeft: 'auto' }}
+          />
+          <Divider style={{ marginTop: '5px', marginBottom: '5px' }}/>
+        </div>
       )
     })
   }

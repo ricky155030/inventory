@@ -16,7 +16,7 @@ class Main extends React.Component {
         <div>
           <Sidebar />
           <div
-            style={{ marginLeft: '200px', marginTop: '20px' }}
+            style={{ marginLeft: '200px' }}
           >
             {this.props.children}
           </div>
