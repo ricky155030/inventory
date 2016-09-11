@@ -3,6 +3,7 @@
 import React from 'react';
 import { cloneDeep } from 'lodash';
 import { Card, CardText, CardHeader } from 'material-ui/Card'
+import RaisedButton from 'material-ui/RaisedButton'
 
 const isObject = (item) => {
   return (item && typeof item === 'object' && !Array.isArray(item) && item !== null);
@@ -32,7 +33,7 @@ const deepAssign = (a, b) => {
   return output
 }
 
-export const wrapperStyle = (Component, wrapProps, name) => {
+export const wrapperProps = (Component, wrapProps) => {
   return class extends React.Component {
     render() {
       const mergedProps = deepAssign(wrapProps, this.props)
@@ -46,20 +47,31 @@ export const wrapperStyle = (Component, wrapProps, name) => {
   }
 }
 
-export const wrapperProps = (Component, WrapProps) => {
-  return class extends React.Component {
-    constructor(props) {
-      super(props)
-    }
+export class HocRaisedButton extends React.Component {
+  static defaultProps = {
+    clicked: false
+  }
 
-    render() {
-      return(
-        <Component 
-          {...this.props}
-          {...WrapProps}
-        />
-      )
-    }
+  constructor(props) {
+    super(props)
+  }
+
+  generateStyle() {
+    const style = {}
+    
+    this.props.clicked ? style.backgroundColor = '#454545' : null
+
+    return style
+  }
+
+  render() {
+
+    return(
+      <RaisedButton
+        {...this.props}
+        {...this.generateStyle()}
+      />
+    )
   }
 }
 
@@ -70,6 +82,10 @@ export class CardWrapper extends React.Component {
     maxHeight: React.PropTypes.string
   }
 
+  static defaultProps = {
+    header: true
+  }
+
   constructor(props) {
     super(props)
   }
@@ -77,12 +93,14 @@ export class CardWrapper extends React.Component {
   render() {
     return(
       <Card>
-        <CardHeader 
-          style={{ backgroundColor: this.props.avatarColor, height: '40px', padding: '8px' }}
-          avatar={this.props.avatar}
-          title={this.props.title}
-          titleStyle={{ paddingTop: '3px', color: this.props.titleColor }}
-        />
+        {this.props.header ? 
+          <CardHeader 
+            style={{ backgroundColor: this.props.avatarColor, height: '40px', padding: '8px' }}
+            avatar={this.props.avatar}
+            title={this.props.title}
+            titleStyle={{ paddingTop: '3px', color: this.props.titleColor }}
+          /> : null
+        }
         <CardText
           style={{ maxHeight: this.props.maxHeight, overflow: 'scroll', paddingBottom: 0 }}
         >

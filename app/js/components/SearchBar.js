@@ -34,10 +34,10 @@ class SearchBar extends React.Component {
         <TextField 
           ref="search"
           hintText="Search"
-          fullWidth
           underlineStyle={{ borderColor: Colors.grey500 }}
           underlineFocusStyle={{ borderColor: Colors.grey800 }}
           hintStyle={{ color: Colors.grey500 }}
+          style={{ marginRight: '20px' }}
           onKeyDown={(e) => {
             switch(e.which) {
               case 13:
@@ -49,9 +49,10 @@ class SearchBar extends React.Component {
           }}
         />
         <RaisedButton 
-          fullWidth
           label="Go"
           backgroundColor={Colors.grey500}
+          style={{ height: '36px', marginTop: '6px' }}
+          labelStyle={{ lineHeight: '36px' }}
           labelColor="#FFF"
           onClick={() => {
            this.update()

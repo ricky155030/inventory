@@ -4,34 +4,47 @@ import React from 'react';
 import { Card, CardText, CardHeader } from 'material-ui/Card';
 import { Toolbar, ToolbarGroup, ToolbarTitle } from 'material-ui/Toolbar';
 import IconButton from 'material-ui/IconButton/IconButton';
+import RaisedButton from 'material-ui/RaisedButton'
 import Avatar from 'material-ui/Avatar';
 import Chip from 'material-ui/Chip';
+import Divider from 'material-ui/Divider';
+import Popover from 'material-ui/Popover';
 import IconDelete from 'material-ui/svg-icons/action/delete';
 import IconEdit from 'material-ui/svg-icons/editor/mode-edit';
 import IconSearch from 'material-ui/svg-icons/action/search';
 import IconViewList from 'material-ui/svg-icons/action/view-list';
 import IconFilter from 'material-ui/svg-icons/content/filter-list';
 import IconError from 'material-ui/svg-icons/alert/error';
+import IconPoll from 'material-ui/svg-icons/social/poll';
 import * as Colors from 'material-ui/styles/colors';
 import { Grid, Row, Col } from 'react-flexbox-grid'
-import { wrapperProps, CardWrapper, loadingWrapper } from '../utils'
+import { wrapperProps, CardWrapper, loadingWrapper, HocRaisedButton } from '../utils'
 import SearchBarContainer from '../containers/SearchBarContainer'
 import SearchLabelContainer from '../containers/SearchLabelContainer'
 import DataTableContainer from '../containers/DataTableContainer'
 import ColumnFilterContainer from '../containers/ColumnFilterContainer'
-import { StickyContainer, Sticky  } from 'react-sticky';
+import { StickyContainer, Sticky } from 'react-sticky';
 import CircularProgress from 'material-ui/CircularProgress';
 
-/* Enhanced Components */
-const enhanced = {}
-
-enhanced.Col = wrapperProps(Col, {
+/* High Order Components */
+const HocCol = wrapperProps(Col, {
   style: {
     marginBottom: '20px'
   }
 })
 
-enhanced.DataTable = loadingWrapper(DataTableContainer)
+const CenterCol = wrapperProps(HocCol, {
+  style: {
+    textAlign: 'center'
+  }
+})
+
+const HocDivider = wrapperProps(Divider, {
+  style: {
+    marginTop: '10px',
+    marginBottom: '10px'
+  }
+})
 
 const Alarm = (content) => {
   return (
@@ -148,7 +161,9 @@ class List extends React.Component {
     this.state = {
       data: [],
       test: {
-      }
+      },
+      filterOpen: false,
+      filterAnchor: null
     }
   }
 
@@ -206,52 +221,117 @@ class List extends React.Component {
         <br />
         <Grid fluid>
           <Row>
-            <enhanced.Col lg={2} md={4} sm={6} xs={12}>
+            <HocCol lg={3} md={6} sm={12} xs={12}>
               <CardWrapper
-                avatar={<IconSearch color="#FFF" />}
-                avatarColor={Colors.grey500}
-                title="Search"
+                avatar={<IconPoll color="#FFF" />}
+                avatarColor={Colors.lightGreen300}
+                title="F14A 3PAR Count"
                 titleColor="#FFF"
               >
-                <SearchBarContainer />
-              </CardWrapper>
-              <br />
-              <CardWrapper
-                avatar={<IconFilter color="#FFF" />}
-                avatarColor={Colors.grey500}
-                title="Column Visible"
-                titleColor="#FFF"
-              >
-                <ColumnFilterContainer
-                  colAll={this.props.colAll}
-                  colDisplay={this.props.colDisplay}
-                  displayName={this.props.displayName}
-                />
-              </CardWrapper>
-              <br />
-              <CardWrapper
-                avatar={<IconFilter color="#FFF" />}
-                avatarColor={Colors.grey500}
-                title="Column Visible"
-                titleColor="#FFF"
-              >
-                <Loading 
-                  data={this.state.test}
+                <div
+                  style={{ width: '100%', textAlign: 'center', fontSize: '48px', fontWeight: 700 }}
                 >
-                  <h1>{this.state.test.status}</h1>
-                </Loading>
+                  30
+                </div>
               </CardWrapper>
-            </enhanced.Col>
-            <enhanced.Col lg={10} md={8} sm={6} xs={12}>
+            </HocCol>
+            <HocCol lg={3} md={6} sm={12} xs={12}>
+              <CardWrapper
+                avatar={<IconPoll color="#FFF" />}
+                avatarColor={Colors.blue300}
+                title="F14A 3PAR Count"
+                titleColor="#FFF"
+              >
+                <div
+                  style={{ width: '100%', textAlign: 'center', fontSize: '48px', fontWeight: 700 }}
+                >
+                  30
+                </div>
+              </CardWrapper>
+            </HocCol>
+            <HocCol lg={3} md={6} sm={12} xs={12}>
+              <CardWrapper
+                avatar={<IconPoll color="#FFF" />}
+                avatarColor={Colors.red300}
+                title="F14A 3PAR Count"
+                titleColor="#FFF"
+              >
+                <div
+                  style={{ width: '100%', textAlign: 'center', fontSize: '48px', fontWeight: 700 }}
+                >
+                  30
+                </div>
+              </CardWrapper>
+            </HocCol>
+            <HocCol lg={3} md={6} sm={12} xs={12}>
+              <CardWrapper
+                avatar={<IconPoll color="#FFF" />}
+                avatarColor={Colors.pink300}
+                title="F14A 3PAR Count"
+                titleColor="#FFF"
+              >
+                <div
+                  style={{ width: '100%', textAlign: 'center', fontSize: '48px', fontWeight: 700 }}
+                >
+                  30
+                </div>
+              </CardWrapper>
+            </HocCol>
+          </Row>
+          <Row>
+            <HocCol lg={12} md={12} sm={12} xs={12}>
               <CardWrapper
                 avatar={<IconViewList color="#FFF" />}
                 avatarColor={Colors.grey500}
                 title="List"
                 titleColor="#FFF"
               >
-                <SearchLabelContainer 
-                  searchText={this.props.searchText}
-                />
+                <Grid fluid style={{ padding: 0 }}>
+                  <Row>
+                    <CenterCol lg={2} md={4} sm={12} xs={12}>
+                      <HocRaisedButton
+                        ref="filter"
+                        label="Filter"
+                        backgroundColor={Colors.grey500}
+                        labelColor="#FFF"
+                        clicked={this.state.filterOpen}
+                        onTouchTap={(e) => { 
+                          this.setState({
+                            filterAnchor: e.currentTarget,
+                            filterOpen: true
+                          })
+                        }}
+                      />
+                      <Popover
+                        anchorEl={this.state.filterAnchor}
+                        open={this.state.filterOpen}
+                        anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
+                        targetOrigin={{horizontal: 'left', vertical: 'top'}}
+                        onRequestClose={() => {
+                          this.setState({
+                            filterOpen: false
+                          })
+                        }}
+                      >
+                        <CardWrapper
+                          avatar={<IconViewList color="#FFF" />}
+                          avatarColor={Colors.grey500}
+                          header={false}
+                        >
+                          <ColumnFilterContainer
+                            colAll={this.props.colAll}
+                            colDisplay={this.props.colDisplay}
+                            displayName={this.props.displayName}
+                          />
+                        </CardWrapper>
+                      </Popover>
+                    </CenterCol>
+                    <CenterCol lg={4} md={8} sm={12} xs={12}>
+                      <SearchBarContainer />
+                    </CenterCol>
+                  </Row>
+                </Grid>
+                <HocDivider />
                 <DataTableContainer
                   definition={definition}
                   itemsPerPage={10}
@@ -259,7 +339,7 @@ class List extends React.Component {
                   filterString={this.props.searchText}
                 />
               </CardWrapper>
-            </enhanced.Col>
+            </HocCol>
           </Row>
         </Grid>
       </StickyContainer>

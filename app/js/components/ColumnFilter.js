@@ -2,15 +2,17 @@
 'use strict';
 
 import React from 'react';
+import * as Colors from 'material-ui/styles/colors';
 import Checkbox from 'material-ui/Checkbox';
+import Avatar from 'material-ui/Avatar';
+import Chip from 'material-ui/Chip';
 import Divider from 'material-ui/Divider';
+import IconCheck from 'material-ui/svg-icons/action/check-circle';
 
 import { wrapperProps } from '../utils'
 
-const checkboxStyle = {
-  block: {
-    maxWidth: 250
-  }
+const chipStyle = {
+  margin: '4px'
 }
 
 class ColumnFilter extends React.Component {
@@ -18,7 +20,7 @@ class ColumnFilter extends React.Component {
     super(props)
   }
 
-  unCheck(item) {
+  addFilter(item) {
     return this.props.colAll.filter((key) => {
       if(this.props.colDisplay.indexOf(key) != -1 || key == item)
         return true
@@ -27,7 +29,7 @@ class ColumnFilter extends React.Component {
     })
   }
 
-  check(item) {
+  removeFilter(item) {
     let index = this.props.colDisplay.indexOf(item)
     return [
       ...this.props.colDisplay.slice(0, index),
@@ -37,20 +39,28 @@ class ColumnFilter extends React.Component {
 
   generateCheckbox() {
     return this.props.colAll.map((key, index) => {
+
       return (
         <div>
-          <Checkbox
+          <Chip
             key={index}
-            label={this.props.displayName[key] || key}
-            labelPosition="left"
-            defaultChecked={this.props.colDisplay.indexOf(key) != -1}
-            onCheck={(e, checked) => {
-              var result = checked ? this.unCheck(key) : this.check(key)
+            style={chipStyle}
+            onTouchTap={(e) => {
+              var result = this.props.colDisplay.indexOf(key) >= 0 ? this.removeFilter(key) : this.addFilter(key)
+
               this.props.setDataTable({colDisplay: result})
             }}
-            iconStyle={{ marginLeft: 'auto' }}
-          />
-          <Divider style={{ marginTop: '5px', marginBottom: '5px' }}/>
+          >
+          {
+            this.props.colDisplay.indexOf(key) >= 0 ?
+            <Avatar 
+              backgroundColor={Colors.green500}
+              icon={<IconCheck />} 
+            /> :
+            null
+          }
+            {this.props.displayName[key] || key}
+          </Chip>
         </div>
       )
     })
@@ -58,7 +68,9 @@ class ColumnFilter extends React.Component {
 
   render() {
     return (
-      <div>
+      <div
+        style={{ display: 'flex' }}
+      >
         {this.generateCheckbox()}
       </div>
     )
