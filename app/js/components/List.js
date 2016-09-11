@@ -16,6 +16,7 @@ import IconViewList from 'material-ui/svg-icons/action/view-list';
 import IconFilter from 'material-ui/svg-icons/content/filter-list';
 import IconError from 'material-ui/svg-icons/alert/error';
 import IconPoll from 'material-ui/svg-icons/social/poll';
+import IconMenu from 'material-ui/svg-icons/navigation/menu';
 import * as Colors from 'material-ui/styles/colors';
 import { Grid, Row, Col } from 'react-flexbox-grid'
 import { wrapperProps, CardWrapper, loadingWrapper, HocRaisedButton } from '../utils'
@@ -25,6 +26,35 @@ import DataTableContainer from '../containers/DataTableContainer'
 import ColumnFilterContainer from '../containers/ColumnFilterContainer'
 import { StickyContainer, Sticky } from 'react-sticky';
 import CircularProgress from 'material-ui/CircularProgress';
+import withWidth from 'material-ui/utils/withWidth';
+
+import { Bar as BarChart } from 'react-chartjs'
+
+const barData = {
+  labels: ["January", "February", "March", "April", "May", "June", "July"],
+  datasets: [
+      {
+          label: "My First dataset",
+          fillColor: "rgba(220,220,220,0.5)",
+          strokeColor: "rgba(220,220,220,0.8)",
+          highlightFill: "rgba(220,220,220,0.75)",
+          highlightStroke: "rgba(220,220,220,1)",
+          data: [65, 59, 80, 81, 56, 55, 40]
+      },
+      {
+          label: "My Second dataset",
+          fillColor: "rgba(151,187,205,0.5)",
+          strokeColor: "rgba(151,187,205,0.8)",
+          highlightFill: "rgba(151,187,205,0.75)",
+          highlightStroke: "rgba(151,187,205,1)",
+          data: [28, 48, 40, 19, 86, 27, 90]
+      }
+  ]
+};
+
+const barOption = {
+  responsive: true
+}
 
 /* High Order Components */
 const HocCol = wrapperProps(Col, {
@@ -193,16 +223,29 @@ class List extends React.Component {
       })
   }
 
+  componentWillUpdate() {
+    console.log(this.props.width)
+  }
+
   render() {
     return (
       <StickyContainer>
-        <Sticky
-          stickyStyle={{ zIndex: 9999 }}
-        >
+        <Sticky style={{ zIndex: 9999 }}>
           <Toolbar
             style={{ backgroundColor: Colors.grey500 }}
           >
             <ToolbarGroup>
+              {
+                this.props.sidebarOpen ? null : 
+                <IconButton 
+                  style={{ height: '56px' }}
+                  onClick={() => {
+                    this.props.setSidebar(true)
+                  }}
+                >
+                  <IconMenu color="#FFF" />
+                </IconButton>
+              }
               <ToolbarTitle
                 style={{ color: '#FFF' }}
                 text="Test"
@@ -221,49 +264,7 @@ class List extends React.Component {
         <br />
         <Grid fluid>
           <Row>
-            <HocCol lg={3} md={6} sm={12} xs={12}>
-              <CardWrapper
-                avatar={<IconPoll color="#FFF" />}
-                avatarColor={Colors.lightGreen300}
-                title="F14A 3PAR Count"
-                titleColor="#FFF"
-              >
-                <div
-                  style={{ width: '100%', textAlign: 'center', fontSize: '48px', fontWeight: 700 }}
-                >
-                  30
-                </div>
-              </CardWrapper>
-            </HocCol>
-            <HocCol lg={3} md={6} sm={12} xs={12}>
-              <CardWrapper
-                avatar={<IconPoll color="#FFF" />}
-                avatarColor={Colors.blue300}
-                title="F14A 3PAR Count"
-                titleColor="#FFF"
-              >
-                <div
-                  style={{ width: '100%', textAlign: 'center', fontSize: '48px', fontWeight: 700 }}
-                >
-                  30
-                </div>
-              </CardWrapper>
-            </HocCol>
-            <HocCol lg={3} md={6} sm={12} xs={12}>
-              <CardWrapper
-                avatar={<IconPoll color="#FFF" />}
-                avatarColor={Colors.red300}
-                title="F14A 3PAR Count"
-                titleColor="#FFF"
-              >
-                <div
-                  style={{ width: '100%', textAlign: 'center', fontSize: '48px', fontWeight: 700 }}
-                >
-                  30
-                </div>
-              </CardWrapper>
-            </HocCol>
-            <HocCol lg={3} md={6} sm={12} xs={12}>
+            <HocCol lg={4} md={10} sm={12} xs={12}>
               <CardWrapper
                 avatar={<IconPoll color="#FFF" />}
                 avatarColor={Colors.pink300}
@@ -271,9 +272,9 @@ class List extends React.Component {
                 titleColor="#FFF"
               >
                 <div
-                  style={{ width: '100%', textAlign: 'center', fontSize: '48px', fontWeight: 700 }}
+                  style={{ textAlign: 'center' }}
                 >
-                  30
+                  <BarChart data={barData} options={barOption} />
                 </div>
               </CardWrapper>
             </HocCol>
@@ -288,13 +289,14 @@ class List extends React.Component {
               >
                 <Grid fluid style={{ padding: 0 }}>
                   <Row>
-                    <CenterCol lg={2} md={4} sm={12} xs={12}>
+                    <CenterCol lg={1} md={1} sm={12} xs={12}>
                       <HocRaisedButton
                         ref="filter"
-                        label="Filter"
+                        icon={<IconFilter color="#FFF" />}
                         backgroundColor={Colors.grey500}
                         labelColor="#FFF"
                         clicked={this.state.filterOpen}
+                        width="50px"
                         onTouchTap={(e) => { 
                           this.setState({
                             filterAnchor: e.currentTarget,
@@ -326,12 +328,11 @@ class List extends React.Component {
                         </CardWrapper>
                       </Popover>
                     </CenterCol>
-                    <CenterCol lg={4} md={8} sm={12} xs={12}>
+                    <CenterCol lg={4} md={6} sm={12} xs={12}>
                       <SearchBarContainer />
                     </CenterCol>
                   </Row>
                 </Grid>
-                <HocDivider />
                 <DataTableContainer
                   definition={definition}
                   itemsPerPage={10}
@@ -347,4 +348,4 @@ class List extends React.Component {
   }
 }
 
-export default List;
+export default withWidth()(List);

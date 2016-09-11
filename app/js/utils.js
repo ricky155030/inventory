@@ -56,20 +56,26 @@ export class HocRaisedButton extends React.Component {
     super(props)
   }
 
-  generateStyle() {
+  generateProps() {
+    const props = {}
     const style = {}
     
-    this.props.clicked ? style.backgroundColor = '#454545' : null
+    this.props.clicked ? props.backgroundColor = '#454545' : undefined
+    this.props.width ? style.minWidth = this.props.width : undefined
 
-    return style
+    props.style = {
+      ...this.props.style,
+      ...style
+    }
+
+    return props
   }
 
   render() {
-
     return(
       <RaisedButton
         {...this.props}
-        {...this.generateStyle()}
+        {...this.generateProps()}
       />
     )
   }

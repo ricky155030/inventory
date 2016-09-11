@@ -16,3 +16,10 @@ export const SetDataTable = function(object) {
     object
   }
 }
+
+export const SetSidebar = function(open) {
+  return {
+    type: type.SET_SIDEBAR,
+    open
+  }
+}

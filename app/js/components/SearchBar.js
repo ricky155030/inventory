@@ -2,21 +2,13 @@
 
 import React from 'react';
 import TextField from 'material-ui/TextField';
-import Avatar from 'material-ui/Avatar';
-import ListItem from 'material-ui/List/ListItem';
-import { Card, CardText } from 'material-ui/Card';
-import { Toolbar, ToolbarGroup, ToolbarTitle } from 'material-ui/Toolbar';
-import { Link } from 'react-router'
-import RaisedButton from 'material-ui/RaisedButton';
-import IconButton from 'material-ui/IconButton/IconButton';
-import IconClose from 'material-ui/svg-icons/navigation/close';
-import IconDelete from 'material-ui/svg-icons/action/delete';
-import IconEdit from 'material-ui/svg-icons/editor/mode-edit';
-import { Table, Th, Tr, Td, Tbody, Thead, unsafe } from 'reactable'
+import IconSearch from 'material-ui/svg-icons/action/search';
 import * as Colors from 'material-ui/styles/colors';
-import { Grid, Row, Col } from 'react-flexbox-grid'
-import { wrapperProps } from '../utils'
-import DataTable from './DataTable'
+import { HocRaisedButton } from '../utils'
+
+const textFieldStyle = { marginRight: '20px', height: '44px' }
+const buttonStyle = { height: '36px' }
+const buttonIconStyle = { marginTop: '6px' }
 
 class SearchBar extends React.Component {
   constructor(props) {
@@ -30,14 +22,17 @@ class SearchBar extends React.Component {
 
   render() {
     return (
-      <div>
+      <div
+        style={{ display: 'flex' }}
+      >
         <TextField 
+          fullWidth
           ref="search"
           hintText="Search"
           underlineStyle={{ borderColor: Colors.grey500 }}
           underlineFocusStyle={{ borderColor: Colors.grey800 }}
           hintStyle={{ color: Colors.grey500 }}
-          style={{ marginRight: '20px' }}
+          style={textFieldStyle}
           onKeyDown={(e) => {
             switch(e.which) {
               case 13:
@@ -48,12 +43,12 @@ class SearchBar extends React.Component {
             }
           }}
         />
-        <RaisedButton 
-          label="Go"
+        <HocRaisedButton 
+          icon={<IconSearch color="#FFF" style={buttonIconStyle} />}
           backgroundColor={Colors.grey500}
-          style={{ height: '36px', marginTop: '6px' }}
-          labelStyle={{ lineHeight: '36px' }}
+          style={buttonStyle}
           labelColor="#FFF"
+          width="50px"
           onClick={() => {
            this.update()
           }}

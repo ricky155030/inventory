@@ -12,7 +12,12 @@ import IconCheck from 'material-ui/svg-icons/action/check-circle';
 import { wrapperProps } from '../utils'
 
 const chipStyle = {
-  margin: '4px'
+  margin: '4px',
+  height: '24px'
+}
+
+const chipLabelStyle = {
+  lineHeight: '24px'
 }
 
 class ColumnFilter extends React.Component {
@@ -45,20 +50,15 @@ class ColumnFilter extends React.Component {
           <Chip
             key={index}
             style={chipStyle}
+            labelStyle={chipLabelStyle}
+            labelColor="#FFF"
+            backgroundColor={this.props.colDisplay.indexOf(key) >= 0 ? Colors.lightGreen500 : Colors.grey500}
             onTouchTap={(e) => {
               var result = this.props.colDisplay.indexOf(key) >= 0 ? this.removeFilter(key) : this.addFilter(key)
 
               this.props.setDataTable({colDisplay: result})
             }}
           >
-          {
-            this.props.colDisplay.indexOf(key) >= 0 ?
-            <Avatar 
-              backgroundColor={Colors.green500}
-              icon={<IconCheck />} 
-            /> :
-            null
-          }
             {this.props.displayName[key] || key}
           </Chip>
         </div>

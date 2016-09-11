@@ -1,7 +1,7 @@
 'use strict';
 
 import { connect } from 'react-redux'
-import { SetDataTable } from '../actions'
+import { SetDataTable, SetSidebar } from '../actions'
 import List from '../components/List'
 
 const mapStateToProps = function(state) {
@@ -12,7 +12,8 @@ const mapStateToProps = function(state) {
     colFilterable: state.datatable.colFilterable,
     displayName: state.datatable.displayName,
     itemsPerPage: state.datatable.itemsPerPage,
-    filterString: state.datatable.filterString
+    filterString: state.datatable.filterString,
+    sidebarOpen: state.sidebar.open
   }
 }
 
@@ -20,6 +21,9 @@ const mapDispatchToProps = function(dispatch) {
   return {
     setDataTable: (object) => {
       return dispatch(SetDataTable(object))
+    },
+    setSidebar: (open) => {
+      return dispatch(SetSidebar(open))
     }
   }
 }
